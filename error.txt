@@ -1,0 +1,19 @@
+Error Messages OpenExodus FSM:
+
+  001a = no carddock connected
+  001b = not every carddock is connected (14)
+  001c = there are more than 14 carddocks
+
+  002a = not all cards are connected(modem/internet)
+  002b = there are to many cards connected
+
+  003a = no tunnel to backupserver is connected
+  003b = there are more than one backupserver tunnel
+
+  004a = backupserver is offline/dont responed
+
+
+
+Standart Ports OpenExodus Servers:
+  userRequestServer = 800
+  licenseRequestServer = 801
