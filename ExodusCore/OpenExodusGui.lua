@@ -1,6 +1,6 @@
 local component = require("component")
 local string = require("string")
-local properties = require("properties")
+local properties = require("OpenExodusProperties")
 local gpu = component.gpu
 
 local OpenExodusGui = {}
@@ -83,7 +83,7 @@ function OpenExodusGui.normalToFullString(data)
 end
 
 function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
-  ------ Returns the XY-Coordinates of a
+  ------ Returns the XY-Coordinates of specific alignment ------
   textHeight = textHeight or 0
 
   if horizontal == "left" then
@@ -106,7 +106,7 @@ function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
     verticalReturn = math.floor(OpenExodusGui.getResolution(height) / 2) - math.floor(textHeight / 2)
   end
   if vertical == "bottomMiddle" then
-    verticalReturn = OpenExodusGui.getResolution(height) - math.floor(OpenExodusGui.getResolution(height) / 4) -textHeight
+    verticalReturn = OpenExodusGui.getResolution(height) - math.floor(OpenExodusGui.getResolution(height) / 4) - textHeight
   end
   if vertical == "bottom" then
     verticalReturn = OpenExodusGui.getResolution(height) - 2 - textHeight
@@ -160,7 +160,7 @@ function OpenExodusGui.drawOpenExodusLogoExtension(x, y, colorExtention)
   gpu.setBackground(properties.BackColor)
 
   gpu.setForeground(colorExtention)
-  gpu.set(x, y, OpenExodusGui.normalToFullString(properties.SysType))
+  gpu.set(x, y, OpenExodusGui.normalToFullString(properties.SysTypePrefix))
 
   return true
 end
