@@ -8,8 +8,8 @@ local gitdownload = require("OpenExodusGitDownloader")
 
 function OpenExodusBoot.preInitialization()
   ------ Overrites the package.path so the OpenExodusPackages are loadable ------
-  package.path = "/Exodus/?.lua;/ExodusCore/?.lua;/lib/?.lua;/usr/lib/?.lua;/home/lib/?.lua;./?.lua;/lib/?/init.lua;/usr/lib/?/init.lua;/home/lib/?/init.lua;./?/init.lua"
-  if filesystem.exists("/core/OpenExodusGui.lua") and filesystem.exists("/core/OpenExodusProperties.lua") and filesystem.exists("/core/OpenExodusGitDownloader.lua") then
+  package.path = "/OpenExodus/?/?.lua;/OpenExodus/?.lua;/lib/?.lua;/usr/lib/?.lua;/home/lib/?.lua;./?.lua;/lib/?/init.lua;/usr/lib/?/init.lua;/home/lib/?/init.lua;./?/init.lua"
+  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGui.lua") and filesystem.exists("/OpenExodus/ExodusCore/OpenExodusProperties.lua") and filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGitDownloader.lua") then
     return true
   else
     print("Error! Your system is cracked, reinstall or contact the developer")
@@ -17,7 +17,10 @@ function OpenExodusBoot.preInitialization()
 end
 
 function OpenExodusBoot.bootUp()
-  
+  print("System booted")
+  local a = io.read()
 end
+
+OpenExodusBoot.bootUp()
 
 return OpenExodusBoot
