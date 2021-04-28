@@ -3,6 +3,10 @@ local internet = require("internet")
 local filesystem = require("filesystem")
 local string = require("string")
 
+if filesystem.exists("/lib/json.lua") == false then
+  shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/json.lua" "/lib/json.lua"')
+end
+local json = require("json")
 
 local function tableContains(table, element)
   for _, value in pairs(table) do
@@ -54,19 +58,19 @@ end
 
 local function downloadTree(systemType, treeDataUrl, parentDir)
   parentDir = parentDir or ""
-  local treedata = json.decode(getHTTPData(treeDataUrl))
+  local treeData = json.decode(getHTTPData(treeDataUrl))
 
   for _, child in pairs(treeData.tree) do
     local filename = parentDir .. "/" .. tostring(child.path)
     if child.type == "tree" then
-      if filesystem.exists("/OpenExodus" .. filename) == false then
-        shell.execute("mkdir " .. "/OpenExodus" .. filename)
-      end
       if string.find(filename, "ExodusCore") or string.find(filename, systemType) then
+        if filesystem.exists("/OpenExodus" .. filename) == false then
+          shell.execute("mkdir " .. "/OpenExodus" .. filename)
+        end
         downloadTree(systemType, child.url, filename)
       end
     else
-      if string.find(filename, "README.md") == false then
+      if string.find(filename, "README.md") == nil then
         shell.execute('rm -fr ' .. "/OpenExodus" .. tostring(filename))
         local repoData = getHTTPData("https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/" .. tostring(filename))
         local file = io.open("/OpenExodus" .. filename, "wb")
@@ -104,14 +108,9 @@ function updatesAvailable()
 end
 
 ---- main ----
-if filesystem.exists("/lib/json.lua") == false then
-  shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/json.lua" "/lib/json.lua"')
-  local json = require("json")
-end
-
 while true do
   io.write("SystemType to install (Ship/Base): ")
-  local systemType = io.read()
+  systemType = io.read()
   io.write("SystemVersion (optional, otherwise latest): ")
   local systemVersion = io.read()
 
@@ -143,4 +142,7 @@ for _, value in pairs(OpenExodusFiles) do
       end
     end
   end
-end 
+end
+
+shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/init.lua" "/init.lua"')
+shell.execute("reboot")

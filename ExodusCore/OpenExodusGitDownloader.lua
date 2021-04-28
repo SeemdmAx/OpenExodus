@@ -70,10 +70,10 @@ function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
   for _, child in pairs(treeData.tree) do
     local filename = parentDir .. "/" .. tostring(child.path)
     if child.type == "tree" then
-      if filesystem.exists(properties.updateTmp .. filename) == false then
-        shell.execute("mkdir " .. properties.updateTmp .. filename)
-      end
       if string.find(filename, properties.GitCoreFolderName) or string.find(filename, properties.SysTypePrefix) or string.find(filename, properties.SysType) then
+        if filesystem.exists(properties.updateTmp .. filename) == false then
+          shell.execute("mkdir " .. properties.updateTmp .. filename)
+        end
         OpenExodusGitDownloader.downloadTree(child.url, filename)
       end
     else
