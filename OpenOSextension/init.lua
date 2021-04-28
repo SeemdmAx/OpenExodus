@@ -1,6 +1,6 @@
 do
   local addr, invoke = computer.getBootAddress(), component.invoke
-  function loadfile(file)
+  local function loadfile(file)
     local handle = assert(invoke(addr, "open", file))
     local buffer = ""
     repeat
@@ -11,22 +11,17 @@ do
     return load(buffer, "=" .. file, "bt", _G)
   end
   loadfile("/lib/core/boot.lua")(loadfile)
+  loadfile("/OpenExodus/ExodusMain/ShipMain.lua")(loadfile)
 end
 
-
-local function dirLookup(updateTmp)
-   local files = {}
-   local p = io.popen('find '.. tostring(updateTmp))
-   for file in p:lines() do
-       table.insert(files, file)
-   end
-   return files
-end
-
-local files = dirLookup("/OpenExodus/ExodusMain")
-for _, value in pairs(files) do
-  local file, _ = string.gsub(value, "/OpenExodus/ExodusMain", "")
-  if string.find(file, "Main.lua") ~= nil then
-    loadfile("/OpenExodus/ExodusMain" .. file)(loadfile)
+while true do
+  local result, reason = xpcall(require("shell").getShell(), function(msg)
+    return tostring(msg).."\n"..debug.traceback()
+  end)
+  if not result then
+    io.stderr:write((reason ~= nil and tostring(reason) or "unknown error") .. "\n")
+    io.write("Press any key to continue.\n")
+    os.sleep(0.5)
+    require("event").pull("key")
   end
 end
