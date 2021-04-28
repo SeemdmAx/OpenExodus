@@ -52,7 +52,7 @@ local function getHTTPData(url)
   return ret
 end
 
-local function downloadTree(treeDataUrl, parentDir, systemType)
+local function downloadTree(systemType, treeDataUrl, parentDir)
   parentDir = parentDir or ""
   local treedata = json.decode(getHTTPData(treeDataUrl))
 
@@ -62,8 +62,8 @@ local function downloadTree(treeDataUrl, parentDir, systemType)
       if filesystem.exists("/OpenExodus" .. filename) == false then
         shell.execute("mkdir " .. "/OpenExodus" .. filename)
       end
-      if string.find(filename, ExodusCore) or string.find(filename, systemType) then
-        downloadTree(child.url, filename)
+      if string.find(filename, "ExodusCore") or string.find(filename, systemType) then
+        downloadTree(systemType, child.url, filename)
       end
     else
       if string.find(filename, "README.md") == false then
@@ -78,7 +78,7 @@ local function downloadTree(treeDataUrl, parentDir, systemType)
   end
 end
 
-function downloadGitRepository()
+function downloadGitRepository(systemType)
   local data = getHTTPData("https://api.github.com/repos/SeemdmAx/OpenExodus/git/refs")
 
   if filesystem.exists("/OpenExodus") == false then
@@ -90,9 +90,17 @@ function downloadGitRepository()
     local commitData = getHTTPData(git.url)
     if commitData then
       local commitDataTree = json.decode(commitData).tree
-      downloadTree(commitDataTree.url)
+      downloadTree(systemType, commitDataTree.url)
     end
   end
+end
+
+function updatesAvailable()
+  ------ Checks the actual github-commit-sha, if not the same as in properties updates are available ------
+  local data = getHTTPData("https://api.github.com/repos/SeemdmAx/OpenExodus/git/refs")
+  local git = json.decode(data)[1].object
+  local availableVersion = git.sha
+  return availableVersion
 end
 
 ---- main ----
@@ -100,3 +108,39 @@ if filesystem.exists("/lib/json.lua") == false then
   shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/json.lua" "/lib/json.lua"')
   local json = require("json")
 end
+
+while true do
+  io.write("SystemType to install (Ship/Base): ")
+  local systemType = io.read()
+  io.write("SystemVersion (optional, otherwise latest): ")
+  local systemVersion = io.read()
+
+  if string.upper(systemType) == "SHIP" then
+    systemType = string.lower(systemType)
+    systemType = string.gsub(systemType, "s", "S")
+    break
+  elseif string.upper(systemType) == "BASE" then
+    systemType = string.lower(systemType)
+    systemType = string.gsub(systemType, "b", "B")
+    break
+  elseif systemType == updatesAvailable() then
+    systemType = string.gsub(systemType, systemType, "")
+    systemType = systemType .. systemVersion
+    break
+  else
+    print("Invaild Input!")
+  end
+end
+
+downloadGitRepository(systemType)
+local OpenExodusFiles = dirLookup("/OpenExodus")
+for _, value in pairs(OpenExodusFiles) do
+  local file, _ = string.gsub(value, "/OpenExodus", "")
+  if string.find(file, "Exodus") then
+    if string.find(file, "ExodusCore") == nil then
+      if string.find(file, ".lua") == nil then
+        filesystem.rename("/OpenExodus" .. file, "/OpenExodus/ExodusMain")
+      end
+    end
+  end
+end 

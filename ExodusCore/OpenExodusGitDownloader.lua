@@ -7,7 +7,7 @@ local string = require("string")
 
 local OpenExodusGitDownloader = {}
 
-local function OpenExodusGitDownloader.tableContains(table, element)
+function OpenExodusGitDownloader.tableContains(table, element)
   ------ checks if a table contains a specific element ------
   for _, value in pairs(table) do
     if value == element then
@@ -17,7 +17,7 @@ local function OpenExodusGitDownloader.tableContains(table, element)
   return false
 end
 
-local function OpenExodusGitDownloader.dirLookup(updateTmp)
+function OpenExodusGitDownloader.dirLookup(updateTmp)
   ------ returns a table of the contents of a directory ------
    local files = {}
    local p = io.popen('find '.. tostring(updateTmp))
@@ -27,7 +27,7 @@ local function OpenExodusGitDownloader.dirLookup(updateTmp)
    return files
 end
 
-local function OpenExodusGitDownloader.split (inputstr, sep)
+function OpenExodusGitDownloader.split (inputstr, sep)
   ------ returns a table of a splited string ------
   if sep == nil then
       sep = "%s"
@@ -39,7 +39,7 @@ local function OpenExodusGitDownloader.split (inputstr, sep)
   return t
 end
 
-local function OpenExodusGitDownloader.getStringFromResponce(responce)
+function OpenExodusGitDownloader.getStringFromResponce(responce)
   ------ gets the strings out of the HTTP responce data ------
   local ret = ""
   local resp = responce()
@@ -50,7 +50,7 @@ local function OpenExodusGitDownloader.getStringFromResponce(responce)
   return ret
 end
 
-local function OpenExodusGitDownloader.getHTTPData(url)
+function OpenExodusGitDownloader.getHTTPData(url)
   ------ gets the necessary HTTP data ------
   ------ for example the json data from the github rest api ------
   local ret = nil
@@ -61,11 +61,11 @@ local function OpenExodusGitDownloader.getHTTPData(url)
   return ret
 end
 
-local function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
+function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
   ------ main download-function ------
   ------ downloads files only written in lua, the coreLibarys and the specific files for the OS defined in the properties ------
   parentDir = parentDir or ""
-  local treedata = json.decode(OpenExodusGitDownloader.getHTTPData(treeDataUrl))
+  local treeData = json.decode(OpenExodusGitDownloader.getHTTPData(treeDataUrl))
 
   for _, child in pairs(treeData.tree) do
     local filename = parentDir .. "/" .. tostring(child.path)
@@ -77,7 +77,7 @@ local function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
         OpenExodusGitDownloader.downloadTree(child.url, filename)
       end
     else
-      if string.find(filename, "README.md") == false then
+      if string.find(filename, "README.md") == nil then
         shell.execute('rm -fr ' .. properties.updateTmp .. tostring(filename))
         local repoData = OpenExodusGitDownloader.getHTTPData("https://raw.githubusercontent.com/" .. tostring(properties.GitUpdateRepository) .. "/master/" .. tostring(filename))
         local file = io.open(properties.updateTmp .. filename, "wb")
@@ -113,7 +113,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
   ------ it although removes the old unneccassary files ------
   local thingsUpdated = 0
   updateTmp = updateTmp or properties.updateTmp
-  exodusFiles= exodusFiles or properties.systemDir
+  exodusFiles = exodusFiles or properties.systemDir
   local newfiles = OpenExodusGitDownloader.dirLookup(updateTmp)
 
   for _, value in pairs(newfiles) do
@@ -133,7 +133,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
           end
         else
           if string.find(file, "/") ~= nil then
-            local folders = split(file, "/")
+            local folders = OpenExodusGitDownloader.split(file, "/")
             local path = ""
             for _, folder in pairs(folders) do
               path = path .. folder

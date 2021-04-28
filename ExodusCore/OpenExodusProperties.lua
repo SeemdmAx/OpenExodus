@@ -1,14 +1,14 @@
 local OpenExodusProperties = {
-      SysTypePrefix = ""
-      SysType = ""
-      currentVersion = ""
+      SysTypePrefix = "",
+      SysType = "",
+      currentVersion = "",
 
-      BackColor = 0x000000
+      BackColor = 0x000000,
 
-      GitUpdateRepository = "SeemdmAx/OpenExodus"
-      GitCoreFolderName = "ExodusCore"
+      GitUpdateRepository = "SeemdmAx/OpenExodus",
+      GitCoreFolderName = "ExodusCore",
 
-      updateTmp = "/gitTmp"
+      updateTmp = "/gitTmp",
       systemDir = "/OpenExodus"
 }
 
