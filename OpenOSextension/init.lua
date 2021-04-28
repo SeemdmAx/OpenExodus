@@ -25,8 +25,8 @@ end
 
 local files = dirLookup("/OpenExodus/ExodusMain")
 for _, value in pairs(files) do
-  local file = string.gsub(value, "/OpenExodus/ExodusMain")
+  local file, _ = string.gsub(value, "/OpenExodus/ExodusMain", "")
   if string.find(file, "Main.lua") ~= nil then
     loadfile("/OpenExodus/ExodusMain" .. file)
   end
-end 
+end
