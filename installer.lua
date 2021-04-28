@@ -145,4 +145,5 @@ for _, value in pairs(OpenExodusFiles) do
 end
 
 shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/init.lua" "/init.lua"')
+shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/boot.lua" "/lib/core/boot.lua"')
 shell.execute("reboot")
