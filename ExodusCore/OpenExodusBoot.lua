@@ -1,10 +1,5 @@
 local OpenExodusBoot = {}
 local filesystem = require("filesystem")
-OpenExodusBoot.preInitialization()
-
-local gui = require("OpenExodusGui")
-local properties = require("OpenExodusProperties")
-local gitdownload = require("OpenExodusGitDownloader")
 
 function OpenExodusBoot.preInitialization()
   ------ Overrites the package.path so the OpenExodusPackages are loadable ------
@@ -16,6 +11,12 @@ function OpenExodusBoot.preInitialization()
     os.exit()
   end
 end
+
+OpenExodusBoot.preInitialization()
+
+local gui = require("OpenExodusGui")
+local properties = require("OpenExodusProperties")
+local gitdownload = require("OpenExodusGitDownloader")
 
 function OpenExodusBoot.bootUp()
   print("System booted")
