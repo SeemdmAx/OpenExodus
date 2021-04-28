@@ -11,15 +11,11 @@ do
     return load(buffer, "=" .. file, "bt", _G)
   end
   loadfile("/lib/core/boot.lua")(loadfile)
-
+  loadfile("/OpenExodus/ExodusCore/OpenExodusBoot.lua")(loadfile)
 end
 
-local shell = require("shell")
-
-shell.execute("/OpenExodus/ExodusCore/OpenExodusBoot.lua")
-
 while true do
-  local result, reason = xpcall(shell.getShell(), function(msg)
+  local result, reason = xpcall(require("shell").getShell(), function(msg)
     return tostring(msg).."\n"..debug.traceback()
   end)
   if not result then

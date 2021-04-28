@@ -14,6 +14,7 @@ function OpenExodusBoot.preInitialization()
   else
     print("Error! Your system is cracked, reinstall or contact the developer")
     os.exit()
+  end
 end
 
 function OpenExodusBoot.bootUp()
