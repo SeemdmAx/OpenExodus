@@ -11,7 +11,7 @@ do
     return load(buffer, "=" .. file, "bt", _G)
   end
   loadfile("/lib/core/boot.lua")(loadfile)
-  loadfile("/OpenExodus/ExodusMain/ShipMain.lua")(loadfile)
+  loadfile("/OpenExodus/ExodusCore/OpenExodusBoot.lua")(loadfile)
 end
 
 while true do
