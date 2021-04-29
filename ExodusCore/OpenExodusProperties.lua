@@ -1,4 +1,4 @@
-OpenExodusProperties = {
+local OpenExodusProperties = {
       SysTypePrefix = "",
       SysType = "",
       currentVersion = "",
