@@ -9,7 +9,9 @@ local OpenExodusProperties = {
       GitCoreFolderName = "ExodusCore",
 
       updateTmp = "/gitTmp",
-      systemDir = "/OpenExodus"
+      systemDir = "/OpenExodus",
+
+      forbiddenGitFiles = {"README.md"}
 }
 
 return OpenExodusProperties
