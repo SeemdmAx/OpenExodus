@@ -11,7 +11,8 @@ local OpenExodusProperties = {
       updateTmp = "/gitTmp",
       systemDir = "/OpenExodus",
 
-      forbiddenGitFiles = {"README.md"}
+      forbiddenGitFiles = {"README.md"},
+
 }
 
 return OpenExodusProperties

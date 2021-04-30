@@ -1,15 +1,32 @@
 local OpenExodusBoot = {}
+
 local filesystem = require("filesystem")
+local shell = require("shell")
 
 function OpenExodusBoot.preInitialization()
+  ------ Checks if main-folder exists ------
+  if filesystem.exists("/OpenExodus") == false then
+    filesystem.makeDirectory("/OpenExodus")
+  end
+
   ------ Overrites the package.path so the OpenExodusPackages are loadable ------
   package.path = "/OpenExodus/ExodusCore/?.lua;/OpenExodus/?/?.lua;/OpenExodus/?.lua;/lib/?.lua;/usr/lib/?.lua;/home/lib/?.lua;./?.lua;/lib/?/init.lua;/usr/lib/?/init.lua;/home/lib/?/init.lua;./?/init.lua"
-  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGui.lua") and filesystem.exists("/OpenExodus/ExodusCore/OpenExodusProperties.lua") and filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGitDownloader.lua") then
-    return true
-  else
-    print("Error! Your system is cracked, reinstall or contact the developer")
-    os.exit()
+
+  ------ Checks if the OpenExodusCorePackages are available ------
+  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGui.lua") == false then
+    shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/ExodusCore/OpenExodusGui.lua" "/OpenExodus/OpenExodusGui.lua"')
   end
+  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusProperties.lua") == false then
+    shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/ExodusCore/OpenExodusProperties.lua" "/OpenExodus/OpenExodusProperties.lua"')
+  end
+  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusGitDownloader.lua") == false then
+    shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/ExodusCore/OpenExodusGitDownloader.lua" "/OpenExodus/OpenExodusGitDownloader.lua"')
+  end
+
+  ------ Check if needed libaries are available, if not then install them ------
+  if filesystem.exists("/lib/json.lua") == false then
+    shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/OpenOSextension/json.lua" "/lib/json.lua"')
+  end  
 end
 
 OpenExodusBoot.preInitialization()
