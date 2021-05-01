@@ -91,26 +91,26 @@ function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
     horizontalReturn = 4
   end
   if horizontal == "middle" then
-    horizontalReturn = math.floor(OpenExodusGui.getResolution(width) / 2 - string.len(text) / 2)
+    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution(width)) / 2 - tonumber(string.len(text)) / 2)
   end
   if horizontal == "right" then
-    horizontalReturn = math.floor(OpenExodusGui.getResolution(width) - 4 - string.len(text))
+    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution(width)) - 4 - tonumber(string.len(text)))
   end
 
   if vertical == "top" then
     verticalReturn = 3
   end
   if vertical == "topMiddle" then
-    verticalReturn = math.floor(OpenExodusGui.getResolution(height) / 4)
+    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution(height)) / 4)
   end
   if vertical == "middle" then
-    verticalReturn = math.floor(OpenExodusGui.getResolution(height) / 2) - math.floor(textHeight / 2)
+    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution(height)) / 2) - math.floor(textHeight / 2)
   end
   if vertical == "bottomMiddle" then
-    verticalReturn = OpenExodusGui.getResolution(height) - math.floor(OpenExodusGui.getResolution(height) / 4) - textHeight
+    verticalReturn = tonumber(OpenExodusGui.getResolution(height)) - math.floor(tonumber(OpenExodusGui.getResolution(height)) / 4) - textHeight
   end
   if vertical == "bottom" then
-    verticalReturn = OpenExodusGui.getResolution(height) - 2 - textHeight
+    verticalReturn = tonumber(OpenExodusGui.getResolution(height)) - 2 - textHeight
   end
 
   return horizontalReturn, verticalReturn

@@ -128,7 +128,9 @@ function OpenExodusBoot.bootUp()
     shell.execute("reboot")
   end
   OpenExodusGui.drawBorder(2, 1, 158, 48, 0x008CCD)
-  OpenExodusGui.drawOpenExodusLogo(OpenExodusGui.getXY("middle", "topMiddle", "██  ████__████ █◤██ ██ ██████◢█◤◥█████◤◥█████◥███◤████◤", 0), 0xFFFFFF, 0x008CCD, 0xFFE400)
+  local statusX, statusY = OpenExodusGui.getXY("middle", "topMiddle", "██  ████__████ █◤██ ██ ██████◢█◤◥█████◤◥█████◥███◤████◤", 0)
+  io.read()
+  OpenExodusGui.drawOpenExodusLogo(statusX, statusY, 0xFFFFFF, 0x008CCD, 0xFFE400)
 
   io.read()
 end
