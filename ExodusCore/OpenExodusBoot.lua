@@ -114,7 +114,7 @@ end
 ------ Run preInitialization and import ExodusPackages ------
 OpenExodusBoot.preInitialization()
 
-local gui = require("OpenExodusGui")
+local OpenExodusGui = require("OpenExodusGui")
 local properties = require("OpenExodusProperties")
 local gitdownload = require("OpenExodusGitDownloader")
 
@@ -123,12 +123,12 @@ local gitdownload = require("OpenExodusGitDownloader")
 
 ------ Main Booting Sequenz ------
 function OpenExodusBoot.bootUp()
-  gui.setMaxResolution()
-  if gui.getResolution("width") ~= 160 or gui.getResolution("height") ~= 50 then
+  OpenExodusGui.setMaxResolution()
+  if OpenExodusGui.getResolution("width") ~= 160 or OpenExodusGui.getResolution("height") ~= 50 then
     shell.execute("reboot")
   end
-  gui.drawBorder(2, 1, 158, 48, 0x008CCD)
-  gui.drawOpenExodusLogo(gui.getXY(middle, topMiddle, "██  ████__████ █◤██ ██ ██████◢█◤◥█████◤◥█████◥███◤████◤"), 0xFFFFFF, 0x008CCD, 0xFFE400)
+  OpenExodusGui.drawBorder(2, 1, 158, 48, 0x008CCD)
+  OpenExodusGui.drawOpenExodusLogo(OpenExodusGui.getXY(middle, topMiddle, "██  ████__████ █◤██ ██ ██████◢█◤◥█████◤◥█████◥███◤████◤"), 0xFFFFFF, 0x008CCD, 0xFFE400)
 
   io.read()
 end
