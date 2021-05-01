@@ -127,8 +127,8 @@ function OpenExodusBoot.bootUp()
   if OpenExodusGui.getResolution("width") ~= 160 or OpenExodusGui.getResolution("height") ~= 50 then
     shell.execute("reboot")
   end
-  OpenExodusGui.drawBorder(2, 1, 158, 48, 0x008CCD)
-  local statusX, statusY = OpenExodusGui.getXY("middle", "topMiddle", "██  ████__████ █◤██ ██ ██████◢█◤◥█████◤◥█████◥███◤████◤", 0)
+  OpenExodusGui.drawBorder(2, 1, 158, 50, 0x008CCD)
+  local statusX, statusY = OpenExodusGui.getXY("middle", "topMiddle", "", 0)
   io.read()
   OpenExodusGui.drawOpenExodusLogo(statusX, statusY, 0xFFFFFF, 0x008CCD, 0xFFE400)
 

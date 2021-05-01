@@ -17,6 +17,10 @@ end
 local filesystem = require("filesystem")
 local string = require("string")
 local shell = require("shell")
+local component = require("component")
+local gpu = component.gpu
+
+gpu.setForeground(0xFFE400)
 
 if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusBoot.lua") == false then
   if filesystem.exists("/OpenExodus/ExodusCore") == false then
@@ -45,12 +49,12 @@ else
   while true do
     io.write("Reboot or shutdown (R/S): ")
     local action = io.read()
-    if action == string.upper("R") then
+    if string.upper(action) == "R" then
       shell.execute("reboot")
-    elseif action == string.upper("S") then
+    elseif string.upper(action) == "S" then
       shell.execute("shutdown")
     else
       print("Invaild input!")
     end
   end
-end 
+end
