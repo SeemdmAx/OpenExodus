@@ -14,10 +14,11 @@ function OpenExodusGui.setMaxResolution()
   return ResolutionReturn
 end
 
-function OpenExodusGui.getResolution()
+function OpenExodusGui.getResolution(returnValue)
   ------ Returns either the screen's width or height ------
+  returnValue = returnValue or "height"
   local width, height = gpu.getResolution()
-  if returnValue == "width" then
+  if string.lower(returnValue) == "width" then
     return width
   else
     return height

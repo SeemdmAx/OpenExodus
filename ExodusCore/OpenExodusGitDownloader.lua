@@ -201,4 +201,24 @@ function OpenExodusGitDownloader.updatesAvailable()
   end
 end
 
+function OpenExodusGitDownloader.saveUpdateVersion()
+  local data = getHTTPData("https://api.github.com/repos/SeemdmAx/OpenExodus/git/refs")
+  local git = json.decode(data)[1].object
+  local currentVersion = git.sha
+
+  for line in io.lines("/OpenExodus/ExodusCore/OpenExodusProperties.lua") do
+    if string.find(line, "currentVersion") ~= nil then
+      line = string.gsub(line, '""', '"' .. currentVersion .. '"') .. "\n";
+    else
+      line = line .. "\n";
+    end
+    local new = io.open("/home/propertiesTmp.lua", "a")
+    new:write(line)
+    new:close()
+  end
+  filesystem.copy("/home/propertiesTmp.lua", "/OpenExodus/ExodusCore/OpenExodusProperties.lua")
+  filesystem.remove("/home/propertiesTmp.lua")
+end
+
+
 return OpenExodusGitDownloader

@@ -3,14 +3,14 @@ local event = require("event")
 local tunnel = component.tunnel
 local modem = component.modem
 
-local syscheck = {}
+local OpenExodusChecks = {}
 
 
 ------ Startup functions ------
 
-function syscheck.checkHardwareCarddocks()
+function OpenExodusChecks.checkHardwareCarddocks()
 
-  ------ Checks if required Carddocks are available ------  
+  ------ Checks if required Carddocks are available ------
 
   local CardDockList = component.list("carddock")
   local count = 0
@@ -28,7 +28,7 @@ function syscheck.checkHardwareCarddocks()
 end
 
 
-function syscheck.checkHardwareCards()
+function OpenExodusChecks.checkHardwareCards()
 
   ------ Checks if internet/network card is available ------
 
@@ -48,10 +48,10 @@ function syscheck.checkHardwareCards()
 end
 
 
-function syscheck.checkHardwareTunnel()
+function OpenExodusChecks.checkHardwareTunnel()
 
   ------ Checks if only one tunnel to BackupServer is connected ------
-  
+
   local tunnelList = component.list("tunnel")
   local tunnelCount = 0
   for _ in pairs(tunnelList) do tunnelCount = tunnelCount + 1 end
@@ -63,7 +63,7 @@ function syscheck.checkHardwareTunnel()
   end
 
   ------ Make BackupServerTunnel primary ------
-  
+
   for address, name in component.list("tunnel") do
     component.setPrimary(address)
   end
@@ -72,12 +72,12 @@ function syscheck.checkHardwareTunnel()
 end
 
 
-function syscheck.checkNetworkBackupServer()
+function OpenExodusChecks.checkNetworkBackupServer()
 
   ------ Checks if connection to BackupServer is given ------
 
   tunnel.send("ping")
-  local _, _, _, port, _, message = event.pull(10, "modem_message") 
+  local _, _, _, port, _, message = event.pull(10, "modem_message")
   if message ~= "pong" then
     return "Error 004a"
   end
@@ -85,7 +85,7 @@ function syscheck.checkNetworkBackupServer()
 end
 
 
-function syscheck.checkNetworkUserRequestServer()
+function OpenExodusChecks.checkNetworkUserRequestServer()
 
   ------ Checks if connection to UserRequestServer is given ------
 
@@ -99,8 +99,8 @@ function syscheck.checkNetworkUserRequestServer()
 end
 
 
-function syscheck.checkNetworkLicenceServer()
- 
+function OpenExodusChecks.checkNetworkLicenceServer()
+
   ------ Checks if connection to LicenceRequestServer is given ------
 
   modem.broadcast(801, "ping")
@@ -114,7 +114,7 @@ end
 
 
 
-function syscheck.checkALl()
+function OpenExodusChecks.checkALl()
 
   ------ Collects every returndata from checks ------
 
@@ -147,4 +147,4 @@ function syscheck.checkALl()
   return Errors
 end
 
-return syscheck
+return OpenExodusChecks
