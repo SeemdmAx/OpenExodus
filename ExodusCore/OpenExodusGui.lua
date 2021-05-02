@@ -89,28 +89,22 @@ function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
 
   if horizontal == "left" then
     horizontalReturn = 4
-  end
-  if horizontal == "middle" then
-    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution(width)) / 2 - tonumber(string.len(text)) / 2)
-  end
-  if horizontal == "right" then
-    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution(width)) - 4 - tonumber(string.len(text)))
+  elseif horizontal == "middle" then
+    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) / 2 - tonumber(string.len(text)) / 2)
+  elseif horizontal == "right" then
+    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) - 4 - tonumber(string.len(text)))
   end
 
   if vertical == "top" then
     verticalReturn = 3
-  end
-  if vertical == "topMiddle" then
-    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution(height)) / 4)
-  end
-  if vertical == "middle" then
-    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution(height)) / 2) - math.floor(textHeight / 2)
-  end
-  if vertical == "bottomMiddle" then
-    verticalReturn = tonumber(OpenExodusGui.getResolution(height)) - math.floor(tonumber(OpenExodusGui.getResolution(height)) / 4) - textHeight
-  end
-  if vertical == "bottom" then
-    verticalReturn = tonumber(OpenExodusGui.getResolution(height)) - 2 - textHeight
+  elseif vertical == "topMiddle" then
+    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution("height")) / 4)
+  elseif vertical == "middle" then
+    verticalReturn = math.floor(tonumber(OpenExodusGui.getResolution("height")) / 2) - math.floor(textHeight / 2)
+  elseif vertical == "bottomMiddle" then
+    verticalReturn = tonumber(OpenExodusGui.getResolution("height")) - math.floor(tonumber(OpenExodusGui.getResolution("height")) / 4) - textHeight
+  elseif vertical == "bottom" then
+    verticalReturn = tonumber(OpenExodusGui.getResolution("height")) - 2 - textHeight
   end
 
   return horizontalReturn, verticalReturn
