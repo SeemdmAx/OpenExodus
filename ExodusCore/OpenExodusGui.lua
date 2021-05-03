@@ -90,7 +90,8 @@ function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
   if horizontal == "left" then
     horizontalReturn = 4
   elseif horizontal == "middle" then
-    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) / 2 - tonumber(string.len(text)) / 2)
+    horizontalReturn = math.floor((tonumber(OpenExodusGui.getResolution("width")) / 2) - (tonumber(string.len(text)) / 2))
+    print(tonumber(string.len(text)) / 2)
   elseif horizontal == "right" then
     horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) - 4 - tonumber(string.len(text)))
   end
