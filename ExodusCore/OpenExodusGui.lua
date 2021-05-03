@@ -83,16 +83,16 @@ function OpenExodusGui.normalToFullString(data)
   return data
 end
 
-function OpenExodusGui.getXY(horizontal, vertical, text, textHeight)
+function OpenExodusGui.getXY(horizontal, vertical, textLen, textHeight)
   ------ Returns the XY-Coordinates of specific alignment ------
   textHeight = textHeight or 0
 
   if horizontal == "left" then
     horizontalReturn = 4
   elseif horizontal == "middle" then
-    horizontalReturn = math.floor((tonumber(OpenExodusGui.getResolution("width")) / 2) - (tonumber(string.len(text)) / 2))
+    horizontalReturn = math.floor((tonumber(OpenExodusGui.getResolution("width")) / 2) - textLen / 2))
   elseif horizontal == "right" then
-    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) - 4 - tonumber(string.len(text)))
+    horizontalReturn = math.floor(tonumber(OpenExodusGui.getResolution("width")) - 4 - textLen)
   end
 
   if vertical == "top" then
