@@ -45,6 +45,10 @@ function OpenExodusBoot.preInitialization()
     shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/ExodusCore/OpenExodusGitDownloader.lua" "/OpenExodus/ExodusCore/OpenExodusGitDownloader.lua"')
   end
 
+  if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusLibary.lua") == false then
+    shell.execute('wget -fq "https://raw.githubusercontent.com/SeemdmAx/OpenExodus/master/ExodusCore/OpenExodusLibary.lua" "/OpenExodus/ExodusCore/OpenExodusLibary.lua"')
+  end
+
     ------ Checks if the mainFile exists, if not it will reinstall the system ------
   local mainExists = false
   local files = OpenExodusBoot.dirLookup("/OpenExodus/ExodusMain")
@@ -117,19 +121,19 @@ OpenExodusBoot.preInitialization()
 local OpenExodusGui = require("OpenExodusGui")
 local properties = require("OpenExodusProperties")
 local gitdownload = require("OpenExodusGitDownloader")
-
+local OpenExodusLibary = require("OpenExodusLibary")
 
 
 
 ------ Main Booting Sequenz ------
 function OpenExodusBoot.bootUp()
-  OpenExodusGui.setMaxResolution()
-  if OpenExodusGui.getResolution("width") ~= 160 or OpenExodusGui.getResolution("height") ~= 50 then
-    shell.execute("reboot")
+  if OpenExodusGui.setNeededResolution() == false then
+    if OpenExodusGui.warningPopUp(45, 21, "Info", "Bad Resolution! Build Screen W:3; H:2 and reboot!", 0x00000, "Reboot", "ResolutionReboot", "Cancle", "ResolutionCancle") == "ResolutionReboot" then
+      shell.execute("reboot")
+    end
   end
-  OpenExodusGui.drawBorder(2, 1, 158, 50, 0x008CCD)
-  local statusX, statusY = OpenExodusGui.getXY("middle", "topMiddle", 55, 0) --- 55
-  OpenExodusGui.drawOpenExodusLogo(statusX, statusY, 0xFFFFFF, 0x008CCD, 0xFFE400)
+
+  OpenExodusGui.drawBootingScreen()
 
   io.read()
 end

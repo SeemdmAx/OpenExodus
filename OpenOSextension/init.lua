@@ -20,6 +20,8 @@ local shell = require("shell")
 local component = require("component")
 local gpu = component.gpu
 
+gpu.setForeground(0x000000)
+gpu.fill(1, 1, 160, 50, " ")
 gpu.setForeground(0xFFE400)
 
 if filesystem.exists("/OpenExodus/ExodusCore/OpenExodusBoot.lua") == false then

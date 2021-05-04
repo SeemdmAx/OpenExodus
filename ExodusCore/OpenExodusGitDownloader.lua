@@ -3,38 +3,10 @@ local internet = require("internet") --- Needed for access github contents
 local filesystem = require("filesystem") --- Needed for creating, removing, copying files/directorys
 local json = require("json") --- Needed for transforming github-restapi returns to useable lua table
 local string = require("string") --- Needed for basic string operations
+local OpenExodusLibary = require("OpenExodusLibary")
 
 local OpenExodusGitDownloader = {}
 
-function OpenExodusGitDownloader.tableContains(table, element)
-  ------ checks if a table contains a specific element ------
-  for _, value in pairs(table) do
-    if value == element then
-      return true
-    end
-  end
-  return false
-end
-
-function OpenExodusGitDownloader.dirLookup(directory)
-  ------ returns a table of the contents of a directory ------
-   local files = {}
-   local p = io.popen('find '.. tostring(directory)) --- Uses the find method, so it returns the full path
-   for file in p:lines() do
-       table.insert(files, file) --- Instert everything into a table and returns it
-   end
-   return files
-end
-
-function OpenExodusGitDownloader.split (inputstr, sep)
-  ------ returns a table of a splited string ------
-  sep = sep or "/"
-  local splitUpString={}
-  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-      table.insert(splitUpString, str)
-  end
-  return splitUpString --- String will be returned splited up in a table, the seperator will be completly removed
-end
 
 function OpenExodusGitDownloader.getStringFromResponce(responce)
   ------ gets the strings out of the HTTP responce data ------
@@ -118,7 +90,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
   local thingsUpdated = 0 --- Counts the things that are updated, when >= 1 the system will reboot
   updateTmp = updateTmp or properties.updateTmp
   exodusFiles = exodusFiles or properties.systemDir
-  local newfiles = OpenExodusGitDownloader.dirLookup(updateTmp)
+  local newfiles = OpenExodusLibary.dirLookup(updateTmp)
 
   for _, value in pairs(newfiles) do
     local file, _  = string.gsub(value, updateTmp .. "/", "")
@@ -137,7 +109,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
           end
         else
           if string.find(file, "/") ~= nil then
-            local folders = OpenExodusGitDownloader.split(file, "/")
+            local folders = OpenExodusLibary.split(file, "/")
             local path = ""
             for _, folder in pairs(folders) do --- creates new folders if they dont exist and creates every file needed in this directory
               path = path .. folder
@@ -162,7 +134,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
   end
 
   ------ Deleting old files ------
-  local oldfiles = OpenExodusGitDownloader.dirLookup(exodusFiles)
+  local oldfiles = OpenExodusLibary.dirLookup(exodusFiles)
   local newFilesExtenstionFree = {}
   for _, value in pairs(newfiles) do
     local file, _ = string.gsub(value, updateTmp .. "/", "")
@@ -172,7 +144,7 @@ function OpenExodusGitDownloader.updateCreateFiles(updateTmp, exodusFiles)
   for _, value in pairs(oldfiles) do
     local oldfile, _ = string.gsub(value, exodusFiles .. "/", "")
     if string.find(oldfile, exodusFiles) == nil then
-      if OpenExodusGitDownloader.tableContains(newFilesExtenstionFree, oldfile) == false then
+      if OpenExodusLibary.tableContains(newFilesExtenstionFree, oldfile) == false then
         filesystem.remove(exodusFiles .. "/" .. oldfile) ---Checks if there are files in the exodusFolder which are not in the updateTmp, if yes the old useless will be deleted
         thingsUpdated = thingsUpdated + 1
       end

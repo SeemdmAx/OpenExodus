@@ -3,7 +3,7 @@ local OpenExodusProperties = {
       SysType = "",
       currentVersion = "",
 
-      BackColor = 0x000000,
+      BackColor = 000000,
 
       GitUpdateRepository = "SeemdmAx/OpenExodus",
       GitCoreFolderName = "ExodusCore",
