@@ -1,6 +1,7 @@
 local component = require("component")
 local string = require("string")
 local event = require("event")
+local filesystem = require("filesystem")
 local properties = require("OpenExodusProperties")
 local OpenExodusLibary = require("OpenExodusLibary")
 local gpu = component.gpu
