@@ -255,27 +255,34 @@ function OpenExodusGui.drawButton(x, y, text, buttonLable, color, textColor, act
   end
 end
 
+function OpenExodusGui.checkTouchEvent(x, y)
+  for lable, cords in pairs(GuiEvents) do
+    local splitCords = OpenExodusLibary.split(cords)
+    local xI = 0
+    while xI <= tonumber(splitCords[3]) do
+        if xI + tonumber(splitCords[1]) == x then
+          local yI = 0
+          while yI <= tonumber(splitCords[4]) do
+            if yI + tonumber(splitCords[2]) == y then
+              if tostring(splitCords[5]) == "true" then
+                GuiEvents[lable] = nil
+              end
+              return lable
+            end
+            yI = yI + 1
+          end
+        end
+        xI = xI + 1
+    end
+  end
+end
+
 function OpenExodusGui.waitForTouchEvent()
   while true do
     local _, _, x, y, _, _ = event.pull("touch")
-    for lable, cords in pairs(GuiEvents) do
-      local splitCords = OpenExodusLibary.split(cords)
-      local xI = 0
-      while xI <= tonumber(splitCords[3]) do
-          if xI + tonumber(splitCords[1]) == x then
-            local yI = 0
-            while yI <= tonumber(splitCords[4]) do
-              if yI + tonumber(splitCords[2]) == y then
-                if tostring(splitCords[5]) == "true" then
-                  GuiEvents[lable] = nil
-                end
-                return lable
-              end
-              yI = yI + 1
-            end
-          end
-          xI = xI + 1
-      end
+    local lable = OpenExodusGui.checkTouchEvent(x, y)
+    if lable then
+      return lable
     end
   end
 end
@@ -342,5 +349,57 @@ function OpenExodusGui.setNeededResolution()
     return true
   end
 end
+
+function OpenExodusGui.drawBootingStatus(text)
+  local clearX, clearY = OpenExodusGui.getXY("middle", "bottomMiddle", 125)
+  OpenExodusGui.drawRectangle(clearX, clearY, 125, 1)
+  if #text > 120 then
+    return false
+  else
+    local statusX, statusY = OpenExodusGui.getXY("middle", "bottomMiddle", #text)
+    OpenExodusGui.drawText(statusX, statusY, text)
+    return true
+  end
+end
+
+function OpenExodusGui.textInput(x, y, maxLenght, color, currentBackground)
+  color = color or 0xFFFFFF
+  currentBackground = currentBackground or properties.BackColor
+  maxLenght = maxLenght or OpenExodusGui.getResolution("widht") - x
+  local text = ""
+  local keys = OpenExodusLibary.getEventNumberToKey()
+  local printOut
+  local eI = 2
+  while true do
+    local type, _, key, key2, _, _, _ = event.pull()
+    if type == "touch" then
+      local lable = OpenExodusGui.checkTouchEvent(key, key2)
+      if lable then
+        if string.find(lable, "Continue") then
+          return text
+        elseif string.find(lable, "Cancle") then
+          return false
+        end
+      end
+    elseif type == "key_up" then
+      key = tonumber(key)
+      if key == 13 then
+        return text
+      elseif key ~= 0 then
+        text = text .. keys[key]
+        if #text > maxLenght then
+          printOut = string.sub(text, eI)
+          eI = eI + 1
+        else
+          printOut = text
+        end
+        gpu.setBackground(currentBackground)
+        gpu.setForeground(color)
+        gpu.set(x, y, printOut)
+      end
+    end
+  end
+end
+
 
 return OpenExodusGui

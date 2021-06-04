@@ -39,7 +39,7 @@ function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
   for _, child in pairs(treeData.tree) do
     local filename = parentDir .. "/" .. tostring(child.path)
     if child.type == "tree" then ---Checks if child(file) is a folder
-      if string.find(filename, properties.GitCoreFolderName) or string.find(filename, properties.SysType) then
+      if string.find(filename, properties.GitCoreFolderName) or string.find(filename, properties.SysTypePrefix) or string.find(filename, properties.AddonFolder) then
         if filesystem.exists(properties.updateTmp .. filename) == false then
           filesystem.makeDirectory(properties.updateTmp .. filename) --- When the folder doesnt exist, it creates it
         end
@@ -52,7 +52,22 @@ function OpenExodusGitDownloader.downloadTree(treeDataUrl, parentDir)
           forbiddenFiles = forbiddenFiles + 1
         end
       end
-      if forbiddenFiles == 0 then
+      ------ Downloads only the specific mainFile ------
+      if sting.find(filename, "Main.lua") ~= nil then
+        if string.find(filename, properties.SysType) == nil then
+          forbiddenFiles = forbiddenFiles + 1
+        end
+      end
+      ------- Checks if addonFile is allowed -------
+      local addonAllowed = false
+      for _, addon in pairs(properties.Addons) do
+        if string.find(filename, addon) then
+          addonAllowed = true
+          break
+        end
+      end
+      ------- Downalods the file ------
+      if forbiddenFiles == 0 or addonAllowed == true then
         filesystem.remove(properties.updateTmp .. tostring(filename))
         local repoData = OpenExodusGitDownloader.getHTTPData("https://raw.githubusercontent.com/" .. tostring(properties.GitUpdateRepository) .. "/master/" .. tostring(filename))
         local file = io.open(properties.updateTmp .. filename, "wb")
@@ -176,21 +191,7 @@ end
 function OpenExodusGitDownloader.saveUpdateVersion()
   local data = getHTTPData("https://api.github.com/repos/SeemdmAx/OpenExodus/git/refs")
   local git = json.decode(data)[1].object
-  local currentVersion = git.sha
-
-  for line in io.lines("/OpenExodus/ExodusCore/OpenExodusProperties.lua") do
-    if string.find(line, "currentVersion") ~= nil then
-      line = string.gsub(line, '""', '"' .. currentVersion .. '"') .. "\n";
-    else
-      line = line .. "\n";
-    end
-    local new = io.open("/home/propertiesTmp.lua", "a")
-    new:write(line)
-    new:close()
-  end
-  filesystem.copy("/home/propertiesTmp.lua", "/OpenExodus/ExodusCore/OpenExodusProperties.lua")
-  filesystem.remove("/home/propertiesTmp.lua")
+  OpenExodusLibary.overwriteProperties("currentVersion = ", git.sha)
 end
-
 
 return OpenExodusGitDownloader
